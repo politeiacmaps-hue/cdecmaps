@@ -1,92 +1,493 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Politeia CMAPS</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-      color: #333;
-    }
-    header {
-      background: #2c3e50;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.2em;
-    }
-    header p {
-      margin: 5px 0 0;
-    }
-    section {
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-    .map-container {
-      margin: 20px 0;
-      text-align: center;
-    }
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .cta {
-      display: block;
-      width: max-content;
-      margin: 30px auto;
-      padding: 12px 25px;
-      background: #e74c3c;
-      color: white;
-      font-size: 1.1em;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-    .cta:hover {
-      background: #c0392b;
-    }
-    footer {
-      background: #2c3e50;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 30px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politeia CMAPS | Inteligencia Territorial para Cobranza</title>
+    <meta name="description" content="Diagnóstico territorial para equipos de cobranza. Recupera calles bloqueadas, reduce incidentes y aumenta eficiencia operativa con análisis basado en riesgo micro-localizado (IRSO).">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #121212; /* Fondo principal muy oscuro */
+            --bg-card: #1e1e24; /* Fondo de tarjetas/secciones secundarias */
+            --text-light: #e0e0e0; /* Texto principal */
+            --text-muted: #a0a0a0; /* Texto secundario */
+            --accent-risk: #d64545; /* Rojo apagado para riesgo/acción fuerte */
+            --accent-warning: #f5a623; /* Ámbar para protocolo/atención */
+            --accent-safe: #388e3c; /* Verde sobrio */
+            --primary-blue: #4a90e2; /* Azul profesional para botones secundarios */
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --section-spacing: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            padding: var(--section-spacing) 0;
+        }
+
+        /* --- BOTONES --- */
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-risk);
+            color: white;
+            box-shadow: 0 4px 15px rgba(214, 69, 69, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #b73838;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            margin-left: 15px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        /* --- HEADER/NAV SIMPLE --- */
+        header {
+            padding: 20px 0;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+            background: linear-gradient(tobottom, rgba(18,18,18,0.8), transparent);
+        }
+        
+        .logo {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent-risk); }
+
+        /* --- 1️⃣ HERO SECTION --- */
+        #hero {
+            position: relative;
+            height: 90vh;
+            min-height: 650px;
+            display: flex;
+            align-items: center;
+            /* REEMPLAZA 'hero-map-cobranza.jpg' CON TU IMAGEN REAL */
+            background: linear-gradient(rgba(18, 18, 24, 0.85), rgba(18, 18, 24, 0.95)), url('hero-map-cobranza.jpg');
+            background-size: cover;
+            background-position: center;
+            border-bottom: 3px solid var(--accent-risk);
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p.lead {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .micro-claim {
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+        .micro-claim i { color: var(--accent-warning); margin-right: 8px;}
+
+        .cta-group { margin-top: 30px; }
+
+        /* --- 2️⃣ EL PROBLEMA REAL --- */
+        #problem {
+            background-color: var(--bg-dark);
+            text-align: center;
+        }
+
+        #problem h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--accent-risk);
+        }
+
+        #problem p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            color: var(--text-muted);
+        }
+
+        /* --- 3️⃣ LO QUE HACE POLITEIA CMAPS --- */
+        #solution {
+            background-color: var(--bg-card);
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .solution-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        .bullet-points {
+            list-style: none;
+        }
+
+        .bullet-points li {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start;
+            font-size: 1.1rem;
+        }
+
+        .bullet-points li i {
+            color: var(--primary-blue);
+            margin-right: 15px;
+            margin-top: 5px;
+            font-size: 1.2rem;
+        }
+        
+        .solution-visual {
+            /* Placeholder para una gráfica o visualización abstracta si se desea, por ahora un icono grande */
+            text-align: center;
+            font-size: 10rem;
+            color: rgba(74, 144, 226, 0.1);
+        }
+
+        /* --- 4️⃣ CÓMO SE USA (PROCESO) --- */
+        #how-it-works {
+            text-align: center;
+        }
+        
+        #how-it-works h2 {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+        }
+
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .step-card {
+            flex: 1;
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            text-align: left;
+            transition: transform 0.3s;
+        }
+
+        .step-card:hover {
+            border-color: var(--accent-warning);
+        }
+
+        .step-image {
+            width: 100%;
+            height: 200px;
+            background-color: #333; /* Placeholder color */
+            margin-bottom: 25px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .step-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Filtro sutil para integrar las imágenes de QGIS */
+            filter: grayscale(30%) contrast(110%); 
+        }
+
+        .step-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent-warning);
+        }
+        
+        .step-number {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.1);
+            position: absolute;
+            margin-top: -45px;
+            margin-left: -10px;
+        }
+
+        .step-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- 5️⃣ QUÉ RECIBE EL CLIENTE --- */
+        #deliverables {
+            background-color: var(--bg-card);
+            text-align: center;
+        }
+
+        #deliverables h2 {
+            margin-bottom: 50px;
+        }
+
+        .deliverables-list {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .deliverable-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 200px;
+        }
+
+        .deliverable-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--accent-safe);
+            margin-bottom: 20px;
+            border: 2px solid var(--accent-safe);
+        }
+
+        .deliverable-item p {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* --- 6️⃣ CTA FINAL --- */
+        #final-cta {
+            padding: 120px 0;
+            text-align: center;
+            background: linear-gradient(45deg, var(--bg-dark), #1a1a1a);
+            border-top: 1px solid #333;
+        }
+
+        #final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .highlight-text {
+            color: var(--accent-risk);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #0a0a0a;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content p.lead { font-size: 1.1rem; }
+            .btn { width: 100%; text-align: center; margin: 10px 0 0 0; }
+            .solution-grid { grid-template-columns: 1fr; }
+            .process-steps { flex-direction: column; }
+            .step-card { margin-bottom: 20px; }
+            .solution-visual { display: none; }
+            #final-cta h2 { font-size: 2rem; }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Politeia CMAPS</h1>
-    <p>Cartografía ciudadana para una democracia informada</p>
-  </header>
 
-  <section>
-    <h2>Mapa de Abstención Electoral 2024</h2>
-    <p>
-      Explora el porcentaje de abstención en la elección presidencial 2024, sección por sección en Edomex y CDMX.
-      Esta es solo una muestra pública. En nuestras demos privadas mostramos también ganadores por coalición,
-      diferencias de votos y cruces con incidencia delictiva.
-    </p>
+    <header>
+        <div class="container">
+            <a href="#" class="logo">Politeia<span>CMAPS</span> | Cobranza</a>
+        </div>
+    </header>
 
-    <div class="map-container">
-      <iframe src="demo/abstencion2024_demo.html"></iframe>
-    </div>
+    <section id="hero">
+        <div class="container hero-content">
+            <h1>Decisiones de entrada segura, manzana por manzana.</h1>
+            <p class="lead">Diagnóstico territorial que permite a equipos de cobranza recuperar calles hoy bloqueadas, reduciendo incidentes y aumentando eficiencia operativa.</p>
+            <div class="micro-claim">
+                <i class="fas fa-shield-alt"></i> Análisis basado en abstención social + riesgo micro-localizado (IRSO).
+            </div>
+            <div class="cta-group">
+                <a href="#final-cta" class="btn btn-primary">Solicitar diagnóstico de zona</a>
+                <a href="#how-it-works" class="btn btn-secondary">Ver ejemplo operativo</a>
+            </div>
+        </div>
+    </section>
 
-    <a class="cta" href="mailto:politeiacmaps@gmail.com">Solicitar Demo Privado</a>
-  </section>
+    <section id="problem">
+        <div class="container">
+            <h2>El riesgo no está en la colonia. Está en decisiones mal calibradas.</h2>
+            <p>La mayoría de los despachos vetan colonias completas por reputación o incidentes aislados.</p>
+            <p>Esto genera pérdida de territorio operativo, rotación de gestores y decisiones basadas en intuición, no en evidencia.</p>
+        </div>
+    </section>
 
-  <footer>
-    <p>© 2025 Politeia CMAPS | politeiacmaps@gmail.com</p>
-  </footer>
+    <section id="solution">
+        <div class="container solution-grid">
+            <div class="solution-text">
+                <h2>Convertimos riesgo social en decisiones operativas claras.</h2>
+                <ul class="bullet-points">
+                    <li><i class="fas fa-ban"></i> Identificación quirúrgica de manzanas no operables (Riesgo Extremo).</li>
+                    <li><i class="fas fa-clipboard-check"></i> Detección de manzanas operables bajo protocolo de seguridad específico.</li>
+                    <li><i class="fas fa-map-marked-alt"></i> Recuperación de territorio "vetado" sin aumentar la exposición del personal.</li>
+                    <li><i class="fas fa-chart-line"></i> Soporte analítico basado en datos para justificar decisiones ante dirección.</li>
+                </ul>
+            </div>
+            <div class="solution-visual">
+                <i class="fas fa-crosshairs"></i>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works">
+        <div class="container">
+            <h2>De análisis territorial a acción en campo.</h2>
+            <div class="process-steps">
+                <div class="step-card">
+                    <span class="step-number">01</span>
+                    <div class="step-image">
+                        <img src="step1-contexto.jpg" alt="Mapa de contexto social">
+                    </div>
+                    <h3>Contexto Social</h3>
+                    <p>Identificación de zonas con alto abandono institucional y carencia de servicios (vulnerabilidad base).</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">02</span>
+                    <div class="step-image">
+                        <img src="step2-riesgo.jpg" alt="Mapa de riesgo micro-localizado">
+                    </div>
+                    <h3>Riesgo Micro-localizado</h3>
+                    <p>Aplicación del Score IRSO para delimitar claramente las manzanas con riesgo elevado dentro de la zona.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">03</span>
+                    <div class="step-image">
+                        <img src="step3-decision.jpg" alt="Mapa de decisión operativa">
+                    </div>
+                    <h3>Decisión Operativa</h3>
+                    <p>Clasificación final clara para el equipo en campo: Entrar / No entrar / Entrar con protocolo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="deliverables">
+        <div class="container">
+            <h2>Un diagnóstico listo para usarse.</h2>
+            <p style="margin-bottom: 40px; color: var(--text-muted)">(Sin datos crudos, sin plataformas complejas que aprender)</p>
+            <div class="deliverables-list">
+                <div class="deliverable-item">
+                    <div class="deliverable-icon"><i class="fas fa-file-alt"></i></div>
+                    <p>Informe ejecutivo de riesgos</p>
+                </div>
+                <div class="deliverable-item">
+                    <div class="deliverable-icon"><i class="fas fa-map"></i></div>
+                    <p>Mapas interpretados en alta resolución</p>
+                </div>
+                <div class="deliverable-item">
+                    <div class="deliverable-icon"><i class="fas fa-table"></i></div>
+                    <p>Tabla de decisiones por manzana</p>
+                </div>
+                <div class="deliverable-item">
+                    <div class="deliverable-icon"><i class="fas fa-tasks"></i></div>
+                    <p>Recomendaciones operativas claras</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="final-cta">
+        <div class="container">
+            <h2>No se trata de entrar a más zonas.<br>Se trata de <span class="highlight-text">entrar mejor</span>.</h2>
+            <br>
+            <button class="btn btn-primary" onclick="alert('Aquí iría tu enlace a Calendly o formulario de contacto.')">Agendar demostración de 10 minutos</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Politeia CMAPS. Inteligencia Estructural para Entornos Volátiles.</p>
+        </div>
+    </footer>
+
 </body>
 </html>
