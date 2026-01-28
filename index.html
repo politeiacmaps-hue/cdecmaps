@@ -3,53 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMAPS | Inteligencia de Riesgo IRSO</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <title>CMAPS | Inteligencia Territorial IRSO 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cian-neon: #00f2ff;
+            --bg-dark: #0a0b0d;
+        }
+        body {
+            margin: 0; background-color: var(--bg-dark);
+            color: white; font-family: 'Roboto Mono', monospace;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        header {
+            text-align: center; padding: 40px 20px;
+            max-width: 900px;
+        }
+        h1 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; color: var(--cian-neon); margin-bottom: 10px; }
+        .metodologia-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--cian-neon);
+            padding: 20px; border-radius: 8px; margin: 20px 0;
+            text-align: left; font-size: 0.9rem;
+        }
+        /* Estilos del Comparador (Slider) */
+        .comparison-slider {
+            position: relative; width: 95vw; max-width: 1000px;
+            aspect-ratio: 4 / 3; overflow: hidden;
+            border: 2px solid #333; border-radius: 10px;
+        }
+        .comparison-slider img {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .img-overlay { width: 50%; overflow: hidden; z-index: 2; border-right: 3px solid var(--cian-neon); }
+        .slider-handle {
+            position: absolute; top: 0; bottom: 0; left: 50%;
+            width: 4px; background: var(--cian-neon); z-index: 3; cursor: ew-resize;
+        }
+        input[type="range"] {
+            position: absolute; top: 0; width: 100%; height: 100%;
+            opacity: 0; z-index: 4; cursor: ew-resize;
+        }
+        .label {
+            position: absolute; bottom: 20px; padding: 5px 15px;
+            background: rgba(0,0,0,0.7); color: var(--cian-neon);
+            font-weight: bold; text-transform: uppercase; z-index: 5;
+        }
+    </style>
 </head>
 <body>
 
-    <nav class="glass-nav">
-        <div class="logo">CMAPS <span class="neon-text">IRSO</span></div>
-        <div class="status-indicator">
-            <span class="dot"></span> SISTEMA ACTIVO - 99.4% ROBUSTEZ
-        </div>
-    </nav>
+<header>
+    <h1>VISIÓN METROPOLITANA IRSO 2026</h1>
+    <p>Decodificando el riesgo en CDMX y EDOMEX con precisión de Sección Electoral.</p>
+    
+    <div class="metodologia-box">
+        <strong>RESUMEN EJECUTIVO:</strong><br>
+        • Salud del Modelo: 99.40% de registros válidos.<br>
+        • Alcance: Integración continua sin costuras administrativas entre CDMX y EDOMEX.<br>
+        • Inteligencia: Clasificación de 5 niveles basada en vulnerabilidad multidimensional.
+    </div>
+</header>
 
-    <header class="hero">
-        <div class="hero-content">
-            <h1>LA VERDAD DETRÁS DEL <span class="neon-text">MAPA</span></h1>
-            <p class="mono-text">35 años de inteligencia cartográfica aplicada al riesgo crítico en CDMX y EDOMEX.</p>
-            <a href="#demo" class="btn-main">SOLICITAR AUDITORÍA DE ZONA</a>
-        </div>
-    </header>
+<div class="comparison-slider">
+    <img src="mapa-irso.jpg" alt="Inteligencia IRSO">
+    
+    <div class="img-overlay" id="overlay">
+        <img src="mapa-base.jpg" alt="Mapa Base">
+    </div>
 
-    <section class="revelacion">
-        <h2 class="section-title">Efecto Revelación: Geopolítica de Precisión</h2>
-        <div class="slider-container">
-            <div class="comparison-slider">
-                <div class="img-overlay" style="background-image: url('mapa-irso.jpg');"></div>
-                <div class="img-base" style="background-image: url('mapa-base.jpg');"></div>
-                <input type="range" min="0" max="100" value="50" class="slider" id="map-slider">
-            </div>
-        </div>
-    </section>
+    <div class="label" style="left: 20px;">Infraestructura Base</div>
+    <div class="label" style="right: 20px; color: #ff003c;">Inteligencia IRSO</div>
 
-    <section class="niveles">
-        <div class="card" style="border-top: 4px solid #ff003c;">
-            <h3 class="mono-text">CRÍTICO</h3>
-            <p>Control fáctico y silencio electoral detectado.</p>
-        </div>
-        <div class="card" style="border-top: 4px solid #ff8c00;">
-            <h3 class="mono-text">ALTO</h3>
-            <p>Anomalías en participación y vulnerabilidad operativa.</p>
-        </div>
-        <div class="card" style="border-top: 4px solid #00d1ff;">
-            <h3 class="mono-text">ESTABLE</h3>
-            <p>Zonas de baja incidencia y cohesión social.</p>
-        </div>
-    </section>
+    <input type="range" min="0" max="100" value="50" id="slider">
+</div>
 
-    <script src="script.js"></script>
+<footer style="padding: 50px; text-align: center; opacity: 0.6;">
+    <p>© 2026 CMAPS - Arquitectura de Datos para Decisiones de Poder.</p>
+</footer>
+
+<script>
+    const slider = document.getElementById('slider');
+    const overlay = document.getElementById('overlay');
+
+    slider.addEventListener('input', (e) => {
+        const value = e.target.value;
+        overlay.style.width = `${value}%`;
+    });
+</script>
+
 </body>
 </html>
