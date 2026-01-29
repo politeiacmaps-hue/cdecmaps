@@ -3,192 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMAPS | IRSO: Capacidad de Respuesta y Predicción</title>
+    <title>CMAPS | Decodificamos el Territorio</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0b0d;
+            --bg: #050608;
             --accent: #00f2ff;
             --danger: #ff003c;
-            --glass: rgba(20, 22, 26, 0.8);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 242, 255, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             background: var(--bg); 
-            color: #e0e0e0; 
-            font-family: 'Inter', -apple-system, sans-serif;
+            color: #ffffff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow-x: hidden;
         }
 
-        /* Hero Moderno con el Slider de fondo */
+        /* Hero de Poder */
         .hero {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(to bottom, rgba(10,11,13,0.5), var(--bg)), url('img/hero-slider-irso.jpg');
+            background: linear-gradient(rgba(5,6,8,0.7), rgba(5,6,8,1)), url('img/hero-slider-irso.jpg');
             background-size: cover;
             background-position: center;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .hero-content { text-align: center; max-width: 1000px; padding: 20px; }
+        .hero-content h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1.1; margin-bottom: 20px; text-shadow: 0 0 30px var(--accent); text-transform: uppercase; letter-spacing: 2px; }
+        .hero-content p { font-size: 1.3rem; color: #ccc; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+
+        /* Sello de Garantía */
+        .badge-salud {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            border: 2px solid var(--danger);
+            background: rgba(255, 0, 60, 0.1);
             text-align: center;
-            padding: 20px;
+            border-radius: 4px;
         }
+        .badge-salud h4 { color: var(--danger); font-size: 1.5rem; margin-bottom: 5px; }
+        .badge-salud p { font-size: 0.8rem !important; letter-spacing: 1px; color: white !important; }
 
-        .hero-content h1 {
-            font-size: clamp(3rem, 10vw, 5rem);
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 10px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px var(--accent));
-        }
+        /* Tríada de Datos (3 Columnas) */
+        .triada-container { padding: 100px 8%; background: #08090b; text-align: center; }
+        .triada-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 50px; }
+        .triada-item { padding: 40px; background: var(--glass); border: 1px solid var(--border); border-radius: 8px; transition: 0.4s; }
+        .triada-item:hover { border-color: var(--accent); transform: translateY(-10px); }
+        .triada-item h3 { color: var(--accent); margin-bottom: 15px; text-transform: uppercase; font-size: 1.2rem; }
+        .triada-item p { color: #aaa; font-size: 1rem; line-height: 1.5; }
 
-        /* Secciones de Metodología - El Sustento Científico */
-        .section {
-            padding: 100px 5%;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 50px;
-            min-height: 80vh;
-        }
-
+        /* Secciones de Revelación */
+        .section { padding: 100px 8%; display: flex; align-items: center; gap: 60px; min-height: 80vh; }
         .section:nth-child(even) { flex-direction: row-reverse; }
+        .img-box { flex: 1.2; }
+        .img-box img { width: 100%; border-radius: 5px; border: 1px solid var(--border); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+        .text-box { flex: 0.8; }
+        .text-box h2 { font-size: 2.5rem; margin-bottom: 20px; color: white; }
+        .text-box p { font-size: 1.1rem; line-height: 1.8; color: #bbb; }
 
-        .image-container {
-            flex: 1;
-            min-width: 300px;
-            position: relative;
-        }
+        /* Formulario Smart */
+        .form-section { padding: 100px 8%; background: #000; text-align: center; }
+        .form-container { max-width: 600px; margin: 50px auto; text-align: left; background: #0a0b0d; padding: 40px; border: 1px solid var(--border); }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 10px; color: var(--accent); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+        input, select { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 3px; }
+        .btn-submit { width: 100%; padding: 15px; background: transparent; border: 1px solid var(--accent); color: var(--accent); font-weight: bold; cursor: pointer; transition: 0.4s; text-transform: uppercase; }
+        .btn-submit:hover { background: var(--accent); color: black; box-shadow: 0 0 20px var(--accent); }
 
-        .image-container img {
-            width: 100%;
-            border-radius: 15px;
-            border: 1px solid rgba(0,242,255,0.3);
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
-        }
-
-        .text-container { flex: 1; min-width: 300px; }
-
-        .text-container h2 {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .badge {
-            background: var(--danger);
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-
-        /* Estilo para los 35 años y la salud del modelo */
-        .trust-bar {
-            background: var(--glass);
-            padding: 40px;
-            text-align: center;
-            border-top: 1px solid #222;
-            border-bottom: 1px solid #222;
-        }
-
-        .stat-item { display: inline-block; margin: 0 40px; }
-        .stat-number { font-size: 3rem; color: var(--accent); font-weight: bold; display: block; }
-
-        .cta-final {
-            padding: 100px 5%;
-            text-align: center;
-            background: radial-gradient(circle, #1a1c20 0%, var(--bg) 100%);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 20px 50px;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 2px;
-            transition: 0.4s;
-        }
-
-        .btn:hover { background: var(--accent); color: black; box-shadow: 0 0 30px var(--accent); }
+        footer { padding: 60px 8%; border-top: 1px solid #111; text-align: center; }
+        .footer-legal { font-size: 0.7rem; color: #444; margin-top: 30px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <section class="hero">
         <div class="hero-content" data-aos="fade-up">
-            <span class="badge">VETERANÍA TECNOLÓGICA</span>
-            <h1>CMAPS</h1>
-            <p>Donde el silencio electoral revela el riesgo delictivo.</p>
+            <h1>Decodificamos el territorio donde otros solo ven mapas.</h1>
+            <p>35 años de inteligencia cartográfica aplicada al Índice IRSO: La única metodología que integra seguridad, demografía y gobernabilidad a nivel manzana.</p>
+            <div class="badge-salud">
+                <h4>99.40%</h4>
+                <p>SALUD METODOLÓGICA AUDITADA</p>
+            </div>
         </div>
     </section>
 
-    <div class="trust-bar">
-        <div class="stat-item">
-            <span class="stat-number">35</span> Experiencia (Años)
-        </div>
-        <div class="stat-item">
-            <span class="stat-number">99.40%</span> Salud del Modelo
-        </div>
-        <div class="stat-item">
-            <span class="stat-number">Jenks</span> Optimización Estadística
-        </div>
-    </div>
-
-    <section class="section">
-        <div class="image-container" data-aos="zoom-in">
-            <img src="img/irso-manzana-micro.jpg" alt="IRSO Manzanas">
-        </div>
-        <div class="text-container" data-aos="fade-left">
-            <h2>01. La Realidad del Vecino</h2>
-            <p>Auditamos el territorio a nivel de censo. Mediante el análisis micro de manzanas, identificamos la huella digital socioeconómica. No es percepción, es ciencia aplicada calle por calle.</p>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="image-container" data-aos="zoom-in">
-            <img src="img/irso-municipal-tendencia.jpg" alt="IRSO Municipal">
-        </div>
-        <div class="text-container" data-aos="fade-right">
-            <h2>02. La Tendencia del Entorno</h2>
-            <p>El delito no es aislado. Nuestro modelo municipal analiza la incidencia delictiva del Secretariado Ejecutivo para entender cómo el entorno macro presiona la seguridad de tu zona de interés.</p>
+    <section class="triada-container">
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">ARQUITECTURA DE SÍNTESIS CIENTÍFICA</h2>
+        <p style="color: #666; margin-bottom: 50px;">El IRSO TOTAL es el resultado de la convergencia de tres capas maestras de datos.</p>
+        <div class="triada-grid">
+            <div class="triada-item" data-aos="fade-up" data-aos-delay="100">
+                <h3>IRSO Municipal (Seguridad)</h3>
+                <p>La tendencia del entorno: Incidencia delictiva ponderada por gravedad basada en el Secretariado Ejecutivo.</p>
+            </div>
+            <div class="triada-item" data-aos="fade-up" data-aos-delay="200">
+                <h3>IRSO Manzana (Entorno)</h3>
+                <p>La realidad micro: Densidad poblacional y vulnerabilidad sociodemográfica extraída directamente del Censo INEGI.</p>
+            </div>
+            <div class="triada-item" data-aos="fade-up" data-aos-delay="300">
+                <h3>IRSO Seccional (La Joya)</h3>
+                <p>La síntesis final: Integración de gobernabilidad y comportamiento electoral para identificar el Silencio Operativo.</p>
+            </div>
         </div>
     </section>
 
     <section class="section">
-        <div class="image-container" data-aos="zoom-in">
-            <img src="img/irso-electoral-abstencionismo.jpg" alt="IRSO Electoral">
+        <div class="img-box" data-aos="fade-right">
+            <img src="img/irso-municipal-tendencia.jpg" alt="Tendencia Municipal">
         </div>
-        <div class="text-container" data-aos="fade-left">
-            <h2>03. El Silencio Social</h2>
-            <p>El abstencionismo es un indicador crítico de gobernabilidad. Donde el ciudadano se retira, el riesgo de control fáctico aumenta. Decodificamos la voluntad ciudadana para predecir vacíos operativos.</p>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="image-container" data-aos="zoom-in">
-            <img src="img/irso-seccional-joya.jpg" alt="IRSO Total">
-        </div>
-        <div class="text-container" data-aos="fade-right">
-            <h2>La Joya de la Corona</h2>
-            <p>El IRSO SECCIONAL es el resultado de la fusión multidimensional. Cruzamos demografía, delito y voto en la Sección Electoral para entregarte una herramienta de decisión blindada y comprobable.</p>
-        </div>
-    </section>
-
-    <section class="cta-final">
-        <h2>¿Necesitas una Auditoría de Zona?</h2>
-        <br><br>
-        <a href="#" class="btn">Acceder a la Inteligencia CMAPS</a>
-    </section>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>AOS.init({ duration: 1000, once: true });</script>
-</body>
-</html>
+        <div class="text-box" data-aos="fade-left">
+            <h2>01. Intelig
